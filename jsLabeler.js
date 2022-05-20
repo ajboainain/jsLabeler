@@ -21,6 +21,8 @@ const svgPoint = (elem, x, y) => {
 svg.addEventListener('mousedown', (event) => {
   const grouping = document.createElement('g');
 
+  
+
   const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
   // const circleTL = document.createElementNS('http://www.w3.org/2000/circle', 'circle');
   const circleTL = document.createElement('circle');
@@ -29,6 +31,8 @@ svg.addEventListener('mousedown', (event) => {
   const circleBR = document.createElementNS('http://www.w3.org/2000/circle', 'circle');
   
   const start = svgPoint(svg, event.clientX, event.clientY);
+
+
   const drawRect = (e) => {
     const p = svgPoint(svg, e.clientX, e.clientY);
     const w = Math.abs(p.x - start.x);
@@ -77,5 +81,4 @@ svg.addEventListener('mousedown', (event) => {
   svg.addEventListener('mousemove', drawRect);
   svg.addEventListener('mouseup', endDraw);
 });
-
 
