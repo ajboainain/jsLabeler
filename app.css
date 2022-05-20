@@ -1,0 +1,50 @@
+/* svg {
+    
+} */
+
+.label-svg-holder {
+    cursor: crosshair;
+    border: 2px solid #000000;
+}
+
+rect {
+    cursor: pointer;
+}
+
+circle {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.labels-menu {
+    outline: 2px solid black;
+    background-color: #F8F8F8;
+}
+
+.toolbar {
+    margin-left: 1rem;
+    outline: 2px solid black;
+}
+
+body {
+    margin: 0.15rem;
+    margin-left: 4rem;
+    padding: 0.15rem;
+    overflow: hidden;
+}
+
+.toolbar_header {
+    margin-top: 1em;
+}
+
+.labels-header {
+    margin-top: 1em;
+}
+
+hr {
+    width:100%;
+}
