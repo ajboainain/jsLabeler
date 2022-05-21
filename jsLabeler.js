@@ -48,7 +48,7 @@ const svgPoint = (elem, x, y) => {
   p.y = y;
   return p.matrixTransform(elem.getScreenCTM().inverse());
 };
-
+//https://javascript.info/mouse-drag-and-drop
 svg.onmousedown = function (event) {
   // ('mousedown', (event) => {
 
