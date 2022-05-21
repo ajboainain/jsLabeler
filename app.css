@@ -8,11 +8,11 @@
 }
 
 rect {
-    cursor: pointer;
+    cursor: move;
 }
 
 circle {
-    cursor: pointer;
+    cursor: nwse-resize;
 }
 
 img {
