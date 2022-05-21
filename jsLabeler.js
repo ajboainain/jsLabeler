@@ -56,88 +56,91 @@ svg.onmousedown = function (event) {
   
   
   if (event.target.nodeName == 'rect') {
-    var pt = svg.createSVGPoint();
-
-    moving = true;
-    // move the rect + circles here
-    var clickedGrouping = event.target.parentNode;
     
-    // Get point in global SVG space
-    function cursorPoint(evt){
-      pt.x = evt.clientX; pt.y = evt.clientY;
-      return pt.matrixTransform(svg.getScreenCTM().inverse());
-    }
-    const moveRect = (e) => {
-      var loc = cursorPoint(event);
-      const w = event.target.getAttribute('width');
-      const h = event.target.getAttribute('height');
+    var currentRect = event.target;
+    var currentGrouping = currentRect.parentNode;
 
-      setRectAttributes(event.target, loc.x, loc.y, w, h);
-      
+    let shiftX = event.clientX - currentRect.getBoundingClientRect().left;
+    let shiftY = event.clientY - currentRect.getBoundingClientRect().top;
+
+    currentRect.style.position = 'absolute';
+    currentRect.style.zIndex = 1000;
+    currentGrouping.append(currentRect);
+
+    function moveAt(pageX, pageY) {
+      currentRect.setAttributeNS(null, 'x', pageX - shiftX);
+      currentRect.setAttributeNS(null, 'y', pageY - shiftY);
     }
-    const endMove = (e) => {
-      event.target.removeEventListener('mousemove', moveRect);
-      event.target.removeEventListener('mouseup', endMove);
-      return;
-      
-    };
-    event.target.addEventListener('mousemove', moveRect);
-    event.target.addEventListener('mouseup', endMove);
-    moving = false;
+
+    function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+
+        // currentRect.hidden = true;
+        // currentRect.hidden = false;
+
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      currentRect.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        currentRect.onmouseup = null;
+        moving = false;
+      };
+
+    console.log(shiftX);
+    // return;
   }
-  if (moving) {
-    return;
-  }
+
+  // const grouping = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+  // var circleTL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  // var circleTR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  // var circleBL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  // var circleBR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   
-  const grouping = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-  var circleTL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  var circleTR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  var circleBL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  var circleBR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  
-  const start = svgPoint(svg, event.clientX, event.clientY);
+  // const start = svgPoint(svg, event.clientX, event.clientY);
 
 
-  const drawRect = (e) => {
-    const p = svgPoint(svg, e.clientX, e.clientY);
-    const w = Math.abs(p.x - start.x);
-    const h = Math.abs(p.y - start.y);
-    if (p.x > start.x) {
-      p.x = start.x;
-    }
+  // const drawRect = (e) => {
+  //   const p = svgPoint(svg, e.clientX, e.clientY);
+  //   const w = Math.abs(p.x - start.x);
+  //   const h = Math.abs(p.y - start.y);
+  //   if (p.x > start.x) {
+  //     p.x = start.x;
+  //   }
 
-    if (p.y > start.y) {
-      p.y = start.y;
-    }
+  //   if (p.y > start.y) {
+  //     p.y = start.y;
+  //   }
 
     
-    setCircleAttributes(circleTL, p.x, p.y, 3);
-    setCircleAttributes(circleTR, p.x, p.y+h, 3);
-    setCircleAttributes(circleBL, p.x+w, p.y, 3);
-    setCircleAttributes(circleBR, p.x+w, p.y+h, 3);
+  //   setCircleAttributes(circleTL, p.x, p.y, 3);
+  //   setCircleAttributes(circleTR, p.x, p.y+h, 3);
+  //   setCircleAttributes(circleBL, p.x+w, p.y, 3);
+  //   setCircleAttributes(circleBR, p.x+w, p.y+h, 3);
 
-    setRectAttributes(rect, p.x, p.y, w, h);
+  //   setRectAttributes(rect, p.x, p.y, w, h);
 
-    grouping.appendChild(rect);
-    grouping.appendChild(circleTL);
-    grouping.appendChild(circleTR);
-    grouping.appendChild(circleBL);
-    grouping.appendChild(circleBR);
-    grouping.classList.add("label-group");
+  //   grouping.appendChild(rect);
+  //   grouping.appendChild(circleTL);
+  //   grouping.appendChild(circleTR);
+  //   grouping.appendChild(circleBL);
+  //   grouping.appendChild(circleBR);
+  //   grouping.classList.add("label-group");
 
-    svg.appendChild(grouping);
-  };
+  //   svg.appendChild(grouping);
+  // };
 
-  const endDraw = (e) => {
-    svg.removeEventListener('mousemove', drawRect);
-    svg.removeEventListener('mouseup', endDraw);
-    console.log(circleTL);
-    console.log(grouping);
-  };
+  // const endDraw = (e) => {
+  //   svg.removeEventListener('mousemove', drawRect);
+  //   svg.removeEventListener('mouseup', endDraw);
+  //   // console.log(circleTL);
+  //   // console.log(grouping);
+  // };
   
-  svg.addEventListener('mousemove', drawRect);
-  svg.addEventListener('mouseup', endDraw);
+  // svg.addEventListener('mousemove', drawRect);
+  // svg.addEventListener('mouseup', endDraw);
 };
 
