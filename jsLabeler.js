@@ -61,7 +61,7 @@ svg.onmousedown = function (event) {
     var currentGrouping = currentRect.parentNode;
 
     let shiftX = event.clientX - currentRect.getBoundingClientRect().left;
-    let shiftY = event.clientY - currentRect.getBoundingClientRect().top;
+    let shiftY = event.clientY - currentRect.getBoundingClientRect().top ;
 
     currentRect.style.position = 'absolute';
     currentRect.style.zIndex = 1000;
@@ -72,75 +72,74 @@ svg.onmousedown = function (event) {
       currentRect.setAttributeNS(null, 'y', pageY - shiftY);
     }
 
-    function onMouseMove(event) {
-        moveAt(event.pageX, event.pageY);
-
-        // currentRect.hidden = true;
-        // currentRect.hidden = false;
-
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-
-      currentRect.onmouseup = function() {
-        document.removeEventListener('mousemove', onMouseMove);
-        currentRect.onmouseup = null;
-        moving = false;
-      };
-
-    console.log(shiftX);
-    // return;
+  function onMouseMove(event) {
+    const coords = svgPoint(svg, event.clientX, event.clientY);
+    moveAt(coords.x, coords.y);
   }
 
-  // const grouping = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  // const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    document.addEventListener('mousemove', onMouseMove);
 
-  // var circleTL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  // var circleTR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  // var circleBL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-  // var circleBR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    currentRect.onmouseup = function() {
+      document.removeEventListener('mousemove', onMouseMove);
+      currentRect.onmouseup = null;
+      moving = false;
+    };
+
+    // console.log(shiftX);
+    return;
+  }
+
+
+
+  const grouping = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+  var circleTL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  var circleTR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  var circleBL = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  var circleBR = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
   
-  // const start = svgPoint(svg, event.clientX, event.clientY);
+  const start = svgPoint(svg, event.clientX, event.clientY);
 
 
-  // const drawRect = (e) => {
-  //   const p = svgPoint(svg, e.clientX, e.clientY);
-  //   const w = Math.abs(p.x - start.x);
-  //   const h = Math.abs(p.y - start.y);
-  //   if (p.x > start.x) {
-  //     p.x = start.x;
-  //   }
+  const drawRect = (e) => {
+    const p = svgPoint(svg, e.clientX, e.clientY);
+    const w = Math.abs(p.x - start.x);
+    const h = Math.abs(p.y - start.y);
+    if (p.x > start.x) {
+      p.x = start.x;
+    }
 
-  //   if (p.y > start.y) {
-  //     p.y = start.y;
-  //   }
+    if (p.y > start.y) {
+      p.y = start.y;
+    }
 
     
-  //   setCircleAttributes(circleTL, p.x, p.y, 3);
-  //   setCircleAttributes(circleTR, p.x, p.y+h, 3);
-  //   setCircleAttributes(circleBL, p.x+w, p.y, 3);
-  //   setCircleAttributes(circleBR, p.x+w, p.y+h, 3);
+    setCircleAttributes(circleTL, p.x, p.y, 3);
+    setCircleAttributes(circleTR, p.x, p.y+h, 3);
+    setCircleAttributes(circleBL, p.x+w, p.y, 3);
+    setCircleAttributes(circleBR, p.x+w, p.y+h, 3);
 
-  //   setRectAttributes(rect, p.x, p.y, w, h);
+    setRectAttributes(rect, p.x, p.y, w, h);
 
-  //   grouping.appendChild(rect);
-  //   grouping.appendChild(circleTL);
-  //   grouping.appendChild(circleTR);
-  //   grouping.appendChild(circleBL);
-  //   grouping.appendChild(circleBR);
-  //   grouping.classList.add("label-group");
+    grouping.appendChild(rect);
+    grouping.appendChild(circleTL);
+    grouping.appendChild(circleTR);
+    grouping.appendChild(circleBL);
+    grouping.appendChild(circleBR);
+    grouping.classList.add("label-group");
 
-  //   svg.appendChild(grouping);
-  // };
+    svg.appendChild(grouping);
+  };
 
-  // const endDraw = (e) => {
-  //   svg.removeEventListener('mousemove', drawRect);
-  //   svg.removeEventListener('mouseup', endDraw);
-  //   // console.log(circleTL);
-  //   // console.log(grouping);
-  // };
+  const endDraw = (e) => {
+    svg.removeEventListener('mousemove', drawRect);
+    svg.removeEventListener('mouseup', endDraw);
+    // console.log(circleTL);
+    // console.log(grouping);
+  };
   
-  // svg.addEventListener('mousemove', drawRect);
-  // svg.addEventListener('mouseup', endDraw);
+  svg.addEventListener('mousemove', drawRect);
+  svg.addEventListener('mouseup', endDraw);
 };
 
